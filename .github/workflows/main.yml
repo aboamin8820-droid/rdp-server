@@ -1,0 +1,32 @@
+name: Bashar-RDP-2026
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Installing Tailscale
+        run: |
+          curl -L https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe -o tailscale-setup.exe
+          start-process -FilePath .\tailscale-setup.exe -ArgumentList "/quiet" -Wait
+          
+      - name: Connecting to Tailscale
+        run: |
+          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey=tskey-auth-kW3Fivz9UE11CNTRL-Cev23vi5jufkfKyX9Sniuf1QxCD7GZTn3
+          
+      - name: Setting Up Remote Desktop
+        run: |
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          
+      - name: Creating Admin User
+        run: |
+          $Password = ConvertTo-SecureString "Bashar_2026_Secure!#" -AsPlainText -Force
+          New-LocalUser "Bashar" -Password $Password -FullName "Bashar Admin" -Description "RDP Admin"
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Bashar"
+          Add-LocalGroupMember -Group "Administrators" -Member "Bashar"
+          
+      - name: Keep Alive (6 Hours)
+        run: |
+          Write-Host "RDP is Online! Connect via Tailscale IP."
+          sleep 21600
