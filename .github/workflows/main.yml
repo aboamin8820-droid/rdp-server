@@ -1,4 +1,4 @@
-name: Bashar-RDP-2026
+name: Bashar-RDP-Final
 on: workflow_dispatch
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
           
       - name: Creating Admin User
         run: |
-          $Password = ConvertTo-SecureString "Bashar_2026_Secure!#" -AsPlainText -Force
+          $Password = ConvertTo-SecureString "Bashar2026Secure" -AsPlainText -Force
           New-LocalUser "Bashar" -Password $Password -FullName "Bashar Admin" -Description "RDP Admin"
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Bashar"
           Add-LocalGroupMember -Group "Administrators" -Member "Bashar"
