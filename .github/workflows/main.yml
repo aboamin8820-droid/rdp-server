@@ -1,4 +1,4 @@
-name: Bashar-RDP-Success
+name: Bashar-RDP-Final-Fix
 on: workflow_dispatch
 
 jobs:
@@ -19,14 +19,11 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           
-      - name: Creating Admin User
+      - name: Reset Administrator Password
         run: |
-          $Password = ConvertTo-SecureString "Bashar@2026#Admin" -AsPlainText -Force
-          New-LocalUser "Bashar" -Password $Password -FullName "Bashar Admin" -Description "RDP Admin"
-          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Bashar"
-          Add-LocalGroupMember -Group "Administrators" -Member "Bashar"
+          net user administrator BasharHacker2026Admin!
           
       - name: Keep Alive (6 Hours)
         run: |
-          Write-Host "RDP is Ready! Connect via Tailscale IP."
+          Write-Host "RDP is Ready! Connect using Tailscale IP."
           sleep 21600
