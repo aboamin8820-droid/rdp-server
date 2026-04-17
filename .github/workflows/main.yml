@@ -1,4 +1,4 @@
-name: Bashar-RDP-Final-Fix
+name: Bashar-RDP-Ultimate-Fix
 on: workflow_dispatch
 
 jobs:
@@ -19,11 +19,12 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           
-      - name: Reset Administrator Password
+      - name: Force Change Password (Any User)
         run: |
-          net user administrator BasharHacker2026Admin!
+          $user = whoami
+          net user $user.Split('\')[1] BasharHacker2026Admin!
           
       - name: Keep Alive (6 Hours)
         run: |
-          Write-Host "RDP is Ready! Connect using Tailscale IP."
+          Write-Host "RDP is Ready! Connect via Tailscale IP."
           sleep 21600
